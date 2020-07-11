@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>SoundFont2_Handler - pure JS implementation (with whistles!)</title>
+
+        <script src='modules/parseSF2.mjs' type="module"></script>
+        <script src='modules/pitchshift.mjs' type="module"></script>
+        <script type="module">
+            import parseSF2 from "./modules/parseSF2.mjs";
+            import pitchshift from "./modules/pitchshift.mjs";
+
+            const loadFileAndProcessAsArrayBuffer = (url, success, error) => {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", url, true);
+                xhr.responseType = "arraybuffer";
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            success(new Uint8Array(xhr.response));
+                        } else {
+                            if (options.error) {
+                                options.error(xhr.statusText);
+                            }
+                        }
+                    }
+                };
+                xhr.send();
+            }
+
+            const getShort = (data, offset) => {
+                //the part with 16 and bitwise operations fixes sign bit
+                return data[offset] | (data[offset+1] << 8) << 16 >> 16;
+            }
+
+            //little-endian 16 bit mono input turned into Web Audio compatible buffer format.
+            //Which has range of [-1.0, 1.0] values.
+            const getWebAudioCompatibleSound = (byteArrayInput) => {
+                let result = new Float32Array(byteArrayInput.length/2);
+
+                for (let i = 0; i < byteArrayInput.length; i++) {
+                    let shortValue = getShort(byteArrayInput, i*2);
+
+                    let floatValue = shortValue >= 0 ?
+                        shortValue / 32767.0 :
+                        shortValue / 32768.0;
+
+                    result[i] = floatValue;
+                }
+
+                return result;
+            }
+
+            //timeLimit in millis.
+            //Web Audio is used to play sound. Sine is default waveform.
+            //Square one is played quiter as it has hmm distinctive feel.
+            const playDebugSound = (hertzFrequencyValue, timeLimit, useSquareType) => {
+                let loudness = 1;
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                var audioCtx = new AudioContext();
+                const currentTime = audioCtx.currentTime;
+
+                let oscillator = audioCtx.createOscillator();
+                if (useSquareType) {
+                    oscillator.type = "square";
+                    loudness = 0.05;
+                }
+                oscillator.frequency.setValueAtTime(hertzFrequencyValue, currentTime);
+
+                let gainNode = audioCtx.createGain();
+                gainNode.gain.setValueAtTime(loudness, currentTime);
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                oscillator.start();
+                setTimeout(() => {oscillator.stop();}, timeLimit);
+            }
+
+            // Load,parse a SoundFont file then play a note.
+            loadFileAndProcessAsArrayBuffer("./soundfonts/YDP-GrandPiano-20160804.sf2", function (sf2Data) {
+                    let parsedData = parseSF2(sf2Data);
+                    console.log(parsedData);
+
+                    // console.log(parsedData.presets);
+                    // console.log(parsedData.instruments);
+                    // console.log(parsedData.samples);
+
+
+                    //Because 11 is for middle C note
+                    let soundLinearCodedBytes = parsedData.samples[11].data;
+
+                    let sound = getWebAudioCompatibleSound(soundLinearCodedBytes);
+
+                    //pitchshift to get missing note based on existing sample
+                    // const twelfthRootOfTwo = 1.0594630943592952646;
+                    // sound = pitchshift(twelfthRootOfTwo**2, 44100, sound);
+
+
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    let audioCtx = new AudioContext();
+
+                    let audioBuffer = audioCtx.createBuffer(1, sound.length, 44100);
+                    audioBuffer.getChannelData(0).set(sound);
+
+                    let bufferBasedAudioSource = audioCtx.createBufferSource();
+                    bufferBasedAudioSource.buffer = audioBuffer;
+                    // bufferBasedAudioSource.loop = true;
+                    bufferBasedAudioSource.connect(audioCtx.destination);
+                    bufferBasedAudioSource.start(0);
+
+                    // playDebugSound(261, 1500);
+                }
+            );
+        </script>
+
+        <style>
+            div {
+                padding: 20px;
+                font-size: 20px;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div>
+            If everything went well then huge SoundFont2 file is loaded in background and <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API">Web Audio API</a> is used to play one piano note. Enjoy!
+        </div>
+        <div>
+            More about format you can find by searching <b>soundfont2 technical specification</b>. It is free and open to work with. It is also old and NOT supported by modern software.
+        </div>
+        <div>
+            File format itself is obsolete but many concepts (<a href="doc.html">docs</a>) are relevant for todays MIDI synthesizers.
+        </div>
+    </body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "sf2_handler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.mjs",
+  "type": "module",
+  "scripts": {
+    "start": "node --experimental-modules src/main.mjs",
+    "extract": "node --experimental-modules src/extract_one_note.mjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

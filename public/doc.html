@@ -1,0 +1,255 @@
+
+<script>
+	const getDataStructureDictionary = () => {
+		let names = [
+			"bag",
+			"big endian",
+			"byte",
+			"BYTE",
+			"case-insensitive",
+			"case-sensitive",
+			"CHAR",
+			"chunk",
+			"doubleword",
+			"DWORD",
+			"enumerated",
+			"global",
+			"global zone",
+			"header",
+			"hydra",
+			"instrument",
+			"instrument zone",
+			"layer",
+			"level",
+			"little endian",
+			"object",
+			"orphan",
+			"preset",
+			"preset zone",
+			"record",
+			"RIFF",
+			"SHORT",
+			"split",
+			"sub-chunk",
+			"terminator",
+			"WORD",
+			"word",
+			"zone"
+		];
+
+		let descriptions = [
+			"A SoundFont data structure element containing a list of preset zones or instrument zones",
+			"Refers to the organization in memory of bytes within a word such that the most significant byte occurs at the lowest address. Contrast \"littel endian\".",
+			"A data structure element of eight bits without definition of meaning to those bits.",
+			"A data structure element of eight bits which contains an unsigned value from 0 to 255.",
+			"Indicates that an ASCII character or string treats alphabetic characters of upper or lower case as identical. Contrast \"case-sensitive\".",
+			"Indicates that an ASCII character or string treats alphabetic characters of upper or lower case as distinct. Contrast \"case-insensitive\".",
+			"A data structure of eight bits which contains a signed value from -128 to +127.",
+			"The top-level division of RIFF file.",
+			"A data structure element of 32 bits without definition of meaning to those bits.",
+			"A data structure of 32 bits which contains an unsigned value from zero to 4,294,967,295.",
+			"Said of a data element whose symbols correspond to particular assigned functions.",
+			"Refers to parameters which affect all associated structures. See \"global zone\".",
+			"A zone whose generators and modulators affect all other zones within the object.",
+			"A data structure element which describes several aspects of a SoundFont element.",
+			"The 9 \"pdta\" sub-chunks which make up the SoundFont articulation data. (9-headed mythical beast)",
+			"In the SoundFont standard, a collection of zones which represents the sound of a single musical instrument or sound effect set.",
+			"A subset of an instrument containing a sample reference and associated articulation data defined to play over certain key numbers and velocities.",
+			"Obsolete. See \"Preset Zone\".",
+			"In the SoundFont structure, this refers either to preset and preset zones (the preset level) or the instrument and instrument zones (the instrument level).",
+			"A method of ordering bytes within larger words in memory in which the least significant byte is at the lowest address. Contrast \"big endian\".",
+			"Either an instrument or a preset, depending on what level (preset or instrument) is being discussed.",
+			"Said of a data structure which under normal circumstances is referenced by a higher level, but in this particular instance is no longer linked. Specifically, it is an instrument which is not referenced by any preset zone, or a sample which is not referenced by any instrument zone.",
+			"A keyboard full of sound. Typically the collection of samples and articulation data associated with a particular MIDI preset number.",
+			"A subset of a preset containing an instrument reference and associated articulation data defined to play over certain key numbers and velocities.",
+			"A single instance of a data structure.",
+			"Acronym for Resource Interchange File Format. The recommended form for interchange files such as SoundFont compatible files within Microsoft operating systems.",
+			"A data structure element of sixteen bits which contains a signed value from -32,768 to +32,767.",
+			"Obsolete. See \"Instrument Zone\".",
+			"A division of a RIFF file below that of the chunk.",
+			"A data structure element indicating the final element in a sequence.",
+			"A data structure of 16 bits which contains an unsigned value from 0 to 65,535.",
+			"A data structure element of 16 bits without definition of meaning to those bits.",
+			"An object and associated articulation data defined to play over certain key numbers and velocities."
+		];
+
+		return {
+			names,
+			descriptions
+		};;
+	}
+
+	const getSynthesizerDictionary = () => {
+		let names = [
+			"articulation",
+			"artifact",
+			"attack",
+			"attenuation",
+			"AWE32",
+			"balance",
+			"bank",
+			"chorus",
+			"cutoff frequency",
+			"data points",
+			"decay",
+			"delay",
+			"DC gain",
+			"digital audio",
+			"downloadable",
+			"dry",
+			"EMU8000",
+			"envelope",
+			"flat",
+			"interpolator",
+			"key number",
+			"LFO",
+			"linear coding",
+			"loop",
+			"loop points",
+			"lowpass",
+			"MIDI",
+			"MIDI bank",
+			"MIDI continuous controller",
+			"MIDI key number",
+			"MIDI pitch bend",
+			"MIDI preset",
+			"MIDI velocity",
+			"mono",
+			"oscillator",
+			"pan",
+			"pitch",
+			"pitch shift",
+			"pole",
+			"Preditor",
+			"preset",
+			"Q",
+			"release",
+			"resonance",
+			"resonant frequency",
+			"reverb",
+			"sample",
+			"soft",
+			"sostenuto",
+			"sustain",
+			"SoundFont",
+			"SoundFont compatible",
+			"stereo",
+			"synthesis engine",
+			"synthesizer",
+			"tremolo",
+			"triangular",
+			"unpitched",
+			"velocity",
+			"vibrato",
+			"volume",
+			"wavetable"
+		];
+
+		let descriptions = [
+			"The process of modulation of amplitude, pitch, and timbre to produce an expressive musical note.",
+			"A (typically undesirable) sonic event which is recognizable as not being present in the original sound.",
+			"That phase of an envelope or sound during which the amplitude increases from zero to a peak value.",
+			"A decrease in volume or amplitude of a signal.",
+			"The original Creative Technology Sound Blaster product which contained an EMU8000 wavetable synthesizer and supported the SoundFont standard.",
+			"A form of stereo volume control in which both left and right channels are at maximum when the control is centered, and which attenuates only the opposite channel when taken to either extreme.",
+			"A collection of presets. See also MIDI bank.",
+			"An effects processing algorithm which involves cyclically shifting the pitch of a signal and remixing it with itself to produce a time varying comb filter, giving a perception of motion and fullness to the resulting sound.",
+			"The frequency of a filter function at which the attenuation reaches a specified value.",
+			"The individual values comprising a sample. Sometimes also called sample points. Contrast \"sample\".",
+			"The portion of an envelope or sound during which the amplitude declines from a peak to steady state value.",
+			"The portion of an envelope or LFO function which elapses from a key-on event until the amplitude becomes non-zero.",
+			"The degree of amplification or attenuation a system presents to a static, or zero frequency signal.",
+			"Audio represented as a sequence of quantized values spaced evenly over time. The values are called \"sample data points\".",
+			"Said of samples which are loaded from a file into RAM, in contrast to samples which are maintained in ROM.",
+			"Refers to audio which has not received any effects processing such as reverb or chorus.",
+			"A wavetable synthesizer chip designed by E-mu Systems for use in Creative Technology products.",
+			"A time varying signal which typically controls the pitch, volume, and/or filter cutoff frequency of a note, and comprises multiple phases including attack, decay, sustain and release.",
+			"Said of a frequency response that does not deviate significantly from a single fixed gain over the audio range. (Also said of a tone that is lower in pitch than another reference tone)",
+			"A circuit or algorithm which computes intermediate points between existing sample data points. This is of particular use in the pitch shifting operation of a wavetable synthesizer, in which these intermediate points represent the output samples of the waveform at the desired pitch transposition.",
+			"See MIDI key number.",
+			"Acronym for Low Frequency Oscillator. A slow periodic modulation source.",
+			"The most common method of encoding amplitudes in digital audio in which each step is of equal size.",
+			"In wavetable synthesis, a portion of a sample which is repeated many times to increase the duration of the resulting sound.",
+			"The sample data points at which a loop begins and ends.",
+			"Said of a filter which attenuates high frequencies but does not attenuate low frequencies.",
+			"Acronym for Musical Instrument Digital Interface. The standard protocol for sending performance information to a musical synthesizer.",
+			"A group of up to 128 presets selected by a MIDI \"change bank\" command.",
+			"A construct in the MIDI protocol.",
+			"A construct in the MIDI protocol which accompanies a MIDI key-on or key-off command and specifies the key of the musical instrument keyboard to which the command refers.",
+			"A special MIDI construct akin to the MIDI continuous controllers which controls the real-time value of the pitch of all notes played in a MIDI channel.",
+			"A \"preset\" selected to be active in a particular MIDI channel by a MIDI \"change preset\" command.",
+			"A construct in the MIDI protocol which accompanies a MIDI key-on or key-off command and specifies the speed with which the key was pressed or released.",
+			"Shoft for \"monophonic\". Indicates a sound comprising only one channel or waveform. Contrast with \"stereo\".",
+			"In wavetable synthesis, the wavetable interpolator is considered an oscillator.",
+			"Shoft for \"panorama\". This is the control of the apparent azimuth of a sound source over 180 degrees from left to right. It is generally implemented by varying the volume at the left and right speakers.",
+			"The perceived value of frequency. Generally can be used interchangeably with frequency.",
+			"A change in pitch. Wavetable synthesis relies on interpolators to cause pitch shift in a sample to produce the notes of the scale.",
+			"A mathematical term used in filter transform analysis. Traditionally in synthesis, a pole is equated with a rolloff of 6dB per octave, and the rolloff of a filter is specified in \"poles\".",
+			"E-mu Systems' propriatary SoundFont 2.00 compatible bank editing software.",
+			"A keyboard full of sound. Typically the collection of samples and articulation data associated with a particular MIDI preset number.",
+			"A mathematical term used in filter transform analysis. Indicates the degree of resonance of the filter. In synthesis terminology, it is synonymous with resonance.",
+			"The portion of an envelope or sound during which the amplitude declines from a steady state to zero or inaudibility.",
+			"Describes the aspect of a filter in which particular frequencies are given significantly more gain than others. The resonance can be measured in dB above the DC gain.",
+			"The frequency at which resonance reaches its maximum.",
+			"Short for reverberation. In synthesis, a synthetic signal processor which adds artificial spaciousness and ambience to a sound.",
+			"This term is often used both to indicate a \"sample data point\" and to indicate a collection of such points comprising a digital audio waveform. The latter meaning is exclusively used in this specification.",
+			"The pedal on a piano, so named because it causes the damper to be lowered in such a way as to soften the timbre and loudness of the notes. In MIDI, continuous controller #66 which behaves in a similar manner.",
+			"The pedal on a piano which causes the dampers on all keys depressed to be held until the pedal is released. In MIDI, continuous controller #67 which behaves in a similar manner.",
+			"The pedal on a piano which prevents all dampers on keys as they are depressed from being released. In MIDI, continuous controller #64 which behaves in a similar manner.",
+			"A registered trademark of E-Mu Systems, Inc, indicating files, data, synthesizers, hardware or software produced by E-Mu that conform to the SoundFont Technical Specification.",
+			"Indicates files, data, synthesizers, hardware or software that conform to the SoundFont Technical Specification.",
+			"Literally indicating three dimensions. In this specification, the term is used to mean two channel stereophonic, indicating that the sound is composed of two independent audio channels, dubbed left and right. Contrast monophonic.",
+			"The hardware and software associated with the signal processing and modulation path for a particular synthesizer.",
+			"A device capable of producing ideally arbitrary musical sound.",
+			"A periodic change in amplitude of a sound, typically produced by applying a low frequency oscillator to the final volume amplifier.",
+			"A waveform which ramps upward to a positive limit, then downward at the opposite slope to the symmetrically negative limit periodically.",
+			"Said of a sound which is not characterized by a perceived frequency. This would be true of noise-like musical instruments and of many sound effects.",
+			"In synthesis, the speed with which a keyboard key is depressed, typically proportionally to the impact delivered by the musician. See also MIDI velocity.",
+			"A periodic change in the pitch of a sound, typically produced by applying a low frequency oscillator to the oscillator pitch.",
+			"The loudness or amplitude of a sound, or the control of this parameter.",
+			"A music synthesis technique wherein musical sounds are recorded or computed mathematically and stored in a memory, then played back at a variable rate to produce the desired pitch. Additional timbre adjustments are often made to the sound thus produced using amplifiers, filters, and effect processing such as reverb and chorus."
+		];
+
+		return {
+			names,
+			descriptions
+		};;
+	}
+
+	const renderSection = (id, names, descriptions) => {
+		let htmlData = "";
+
+		for (let i = 0; i < names.length; i++) {
+			let name = names[i];
+			let description = descriptions[i];
+
+			let style = "margin: 0; margin-left:10px; padding: 10px;";
+
+			if (i % 2 === 0) {
+				style += "background-color: gainsboro;";
+			}
+
+			htmlData += "<p style=\""+style+"\"><b>"+name+"</b> — "+description+"</p>\n";
+		}
+
+		document.querySelector("#"+id).innerHTML += htmlData;
+	}
+
+	window.onload = () => {
+		const dataStructureDictionary = getDataStructureDictionary();
+
+		renderSection("dataStructureDictionary", dataStructureDictionary.names, dataStructureDictionary.descriptions);
+
+		const synthesizerDictionary = getSynthesizerDictionary();
+
+		renderSection("synthesizerDictionary", synthesizerDictionary.names, synthesizerDictionary.descriptions);
+	}
+</script>
+<body style="font-family: sans-serif">
+	<div id="dataStructureDictionary">
+		<h2>Data Structure Dictionary</h> 
+	</div>
+	<div id="synthesizerDictionary">
+		<h2>Synthesizer Dictionary</h> 
+	</div>
+</body>
