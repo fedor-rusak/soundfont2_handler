@@ -5,6 +5,10 @@ This is node-based app with default soundFont2 file that allows parsing midi-sou
 
 It also contains a script that allows extracting a sample in WAV format.
 
+Now by default it saves played sound on your local file system.
+
+As a bonus you can play a sound via audio html tag.
+
 # Requirements
 
 Tested in Win10 and Node 12.16.2

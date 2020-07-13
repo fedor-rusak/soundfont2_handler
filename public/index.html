@@ -5,6 +5,7 @@
 
         <script src='modules/parseSF2.mjs' type="module"></script>
         <script src='modules/pitchshift.mjs' type="module"></script>
+        <script src='js/OggVorbisEncoder.js'></script>
         <script type="module">
             import parseSF2 from "./modules/parseSF2.mjs";
             import pitchshift from "./modules/pitchshift.mjs";
@@ -76,6 +77,35 @@
                 setTimeout(() => {oscillator.stop();}, timeLimit);
             }
 
+            const  convertMonoWebAudioToOggBlob = (soundData) => {
+                let encoder = new OggVorbisEncoder(44100, 1, 1);
+
+                encoder.encode([soundData]);
+                
+                return encoder.finish();
+            }
+
+            const playMonoWebAudioData = (soundData) => {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                let audioCtx = new AudioContext();
+
+                let audioBuffer = audioCtx.createBuffer(1, soundData.length, 44100);
+                audioBuffer.getChannelData(0).set(soundData);
+
+                let bufferBasedAudioSource = audioCtx.createBufferSource();
+                bufferBasedAudioSource.buffer = audioBuffer;
+                // bufferBasedAudioSource.loop = true;
+                bufferBasedAudioSource.connect(audioCtx.destination);
+                bufferBasedAudioSource.start(0);
+            }
+
+            const addAudioControlUIElementForBlob = (blobData) => {
+                let audioTag = document.createElement("audio");
+                audioTag.setAttribute("controls", "");
+                document.body.appendChild(audioTag);
+                audioTag.src = URL.createObjectURL(blobData);
+            }
+
             // Load,parse a SoundFont file then play a note.
             loadFileAndProcessAsArrayBuffer("./soundfonts/YDP-GrandPiano-20160804.sf2", function (sf2Data) {
                     let parsedData = parseSF2(sf2Data);
@@ -96,17 +126,26 @@
                     // sound = pitchshift(twelfthRootOfTwo**2, 44100, sound);
 
 
-                    const AudioContext = window.AudioContext || window.webkitAudioContext;
-                    let audioCtx = new AudioContext();
+                    // playMonoWebAudioData(sound);
 
-                    let audioBuffer = audioCtx.createBuffer(1, sound.length, 44100);
-                    audioBuffer.getChannelData(0).set(sound);
+                    const uploadOggBlob = (oggBlob) => {
+                        var xhr=new XMLHttpRequest();
+                        xhr.onload=function(e) {
+                          if(this.readyState === 4) {
+                              console.log("Server returned: ", e.target.responseText);
+                          }
+                        };
+                        var formData = new FormData();
+                        formData.append("audio_data", oggBlob, "sound.ogg");
+                        xhr.open("POST","file_upload",true);
+                        xhr.send(formData);
+                    }
 
-                    let bufferBasedAudioSource = audioCtx.createBufferSource();
-                    bufferBasedAudioSource.buffer = audioBuffer;
-                    // bufferBasedAudioSource.loop = true;
-                    bufferBasedAudioSource.connect(audioCtx.destination);
-                    bufferBasedAudioSource.start(0);
+                    let blob = convertMonoWebAudioToOggBlob(sound);
+     
+                    addAudioControlUIElementForBlob(blob);
+
+                    uploadOggBlob(blob);
 
                     // playDebugSound(261, 1500);
                 }

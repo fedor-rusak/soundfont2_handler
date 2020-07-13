@@ -2,3 +2,5 @@ node_modules
 package-lock.json
 note.wav 
 public/soundfonts/YDP-GrandPiano-20160804.sf2
+tmp
+saved_sounds
